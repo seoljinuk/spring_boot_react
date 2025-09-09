@@ -6,6 +6,7 @@ import com.coffee.entity.Product;
 import com.coffee.repository.ProductRepository;
 import com.coffee.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,10 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository ;
+
+    // ✅ application.properties에서 값 읽어오기
+    @Value("${productImageLocation}")
+    private String productImageLocation;
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Product updateProduct){
@@ -64,8 +69,12 @@ public class ProductController {
         String imageFileName = "product_" + System.currentTimeMillis() + ".jpg";
 
         // File : 파일이나 폴더를 처리하기 위한 자바 클래스
-//        String pathName = "c:/boot/images/" ;
-        String pathName = "/home/ubuntu/shop/image/" ;
+        // String pathName = "c:/boot/images/" ;
+        // String pathName = "/home/ubuntu/shop/image/" ;
+        String pathName = productImageLocation.endsWith("\\") || productImageLocation.endsWith("/")
+                ? productImageLocation
+                : productImageLocation + File.separator;
+
         File imageFile = new File(pathName + imageFileName);
 
         // FileOutputStream : 바이트 파일을 처리해주는 자바 스트림 클래스
@@ -80,35 +89,6 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService; // 생성자 주입
     }
-
-//    // http://localhost:9000/product/list
-//    @GetMapping("/list") // 상품 목록 보여 주세요.
-//    public ResponseEntity<List<Product>> list(){
-//        List<Product> products = this.productService.listProducts() ;
-//        System.out.println("상품 개수 : " + products.size());
-//
-//        // Http 응답 코드 200(성공)과 함께 상품 정보를 json으로 반환해줍니다.
-//        return ResponseEntity.ok(products) ;
-//    }
-
-//    // http://localhost:9000/product/list?pageNumber=페이지번호&pageSize=페이지사이즈
-//    @GetMapping("/list") // 페이징 처리를 사용하여 상품 목록 일부를 보여 주세요.
-//    public ResponseEntity<Page<Product>> list(
-//            @RequestParam(defaultValue = "0") int pageNumber,
-//            @RequestParam(defaultValue = "6")  int pageSize
-//    ){
-//        // pageSize개씩 묶은 다음에 pageNumber 페이지의 내용을 추출합니다.(0 base)
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//
-//        Page<Product> products = this.productService.listProducts(pageable) ;
-//
-//        System.out.println("총 상품 개수 : " + products.getTotalElements());
-//        System.out.println("총 페이지 번호 : " + products.getTotalPages());
-//        System.out.println("현재 페이지 번호 : " + products.getNumber());
-//
-//        // Http 응답 코드 200(성공)과 함께 상품 정보를 json으로 반환해줍니다.
-//        return ResponseEntity.ok(products) ;
-//    }
 
     // http://localhost:9000/product/list?pageNumber=페이지번호&pageSize=페이지사이즈
     @GetMapping("/list") // 페이징 처리를 사용하여 상품 목록 일부를 보여 주세요.
@@ -169,8 +149,12 @@ public class ProductController {
         // 데이터 베이스에 저장될 문자열 형식의 이미지 이름
         String imageFileName = "product_" + System.currentTimeMillis() + ".jpg" ;
 
-        //        String pathName = "c:/boot/images/" ;
-        String pathName = "/home/ubuntu/shop/image/" ;
+        // String pathName = "c:/boot/images/" ;
+        // String pathName = "/home/ubuntu/shop/image/" ;
+        String pathName = productImageLocation.endsWith("\\") || productImageLocation.endsWith("/")
+                ? productImageLocation
+                : productImageLocation + File.separator;
+
         File imageFile = new File(pathName + imageFileName);
 
         try {
