@@ -7,9 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -20,25 +22,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController // 웹 요청을 처리해주는 컨트롤러로 만들어 줍니다.
+@RequiredArgsConstructor
 @RequestMapping("/member")
 //@CrossOrigin(origins =  "http://localhost:3000") // 3000번 포트에서 들어 오는 데이터를 위하여 개방하겠습니다.
 public class MemberController {
 
+    private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder; // Lombok이 생성자 주입 처리
+
     // 데이터 베이스와 연동하는 repository 객체
     private final MemberRepository memberRepository ;
-
-    @Autowired // 멤버 변수를 자동으로 주입해주는 어노테이션
-    public MemberController(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     /*
     컨트롤러 메소드 : 클라이언트의 요청에 대한 응답을 해주는 메소드
     컨트롤러 메소드의 매개 변수에 어떠한 것이 사용되는 지 공부해 주세요.
     */
 
-    @Autowired
-    private MemberService memberService ;
+
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Member bean, HttpServletRequest request){
@@ -114,6 +114,8 @@ public class MemberController {
         }
 
         // 회원 가입 처리
+        // 비밀번호 암호화 적용 ✅
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
         member.setRole(Role.USER); // 일반 사용자
         member.setRegdate(LocalDate.now()); // 현재 시각
         

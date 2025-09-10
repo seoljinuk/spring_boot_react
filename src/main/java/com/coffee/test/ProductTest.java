@@ -16,10 +16,11 @@ public class ProductTest {
 
     @Test
     public void testCreateProducts(){
-        List<String> imageFileList = GenerateData.getImageFileNames();
+        GenerateData gendata = new GenerateData();
+        List<String> imageFileList = gendata.getImageFileNames();
 
         for(int i = 0 ; i < imageFileList.size() ; i++ ){
-            Product bean = GenerateData.createProduct(i, imageFileList.get(i));
+            Product bean = gendata.createProduct(i, imageFileList.get(i));
 
             productRepository.save(bean) ; // 데이터 베이스에 저장
         }
