@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +58,9 @@ public class MemberController {
         }
 
         boolean isCorrectPassword = false ;
-        isCorrectPassword = member.getPassword().equals(bean.getPassword());
+//        isCorrectPassword = member.getPassword().equals(bean.getPassword());
+        // 🔑 수정된 비밀번호 비교
+        isCorrectPassword = passwordEncoder.matches(bean.getPassword(), member.getPassword());
 
         //  if(!isCorrectPassword){}
         if(isCorrectPassword == false){
@@ -88,6 +91,8 @@ public class MemberController {
         return ResponseEntity.ok("로그 아웃 성공") ;
     }
 
+
+    private final PasswordEncoder passwordEncoder;
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody Member member, BindingResult bindingResult){
         // ResponseEntity : HTTP 응답 코드, 메시지 등을 표현하는 클래스
@@ -115,7 +120,7 @@ public class MemberController {
 
         // 회원 가입 처리
         // 비밀번호 암호화 적용 ✅
-//        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
         member.setRole(Role.USER); // 일반 사용자
         member.setRegdate(LocalDate.now()); // 현재 시각
         

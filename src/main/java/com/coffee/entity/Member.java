@@ -33,7 +33,7 @@ public class Member {
     private String email ;
 
     @NotBlank(message = "비밀 번호는 필수 입력 사항입니다.")
-    @Size(min = 8, max = 16, message = "비밀번호는 8자리 이상, 16자리 이하로 입력해 주세요.")
+    @Size(min = 8, max = 255, message = "비밀번호는 8자리 이상, 255자리 이하로 입력해 주세요.")
     @Pattern(regexp = ".*[A-Z].*", message = "비밀 번호는 대문자 1개 이상을 포함해야 합니다.")
     @Pattern(regexp = ".*[!@#$%].*", message = "비밀 번호는 특수 문자 '!@#$%' 중 하나 이상을 포함해야 합니다.")
     private String password ;
