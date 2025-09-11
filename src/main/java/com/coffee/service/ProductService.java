@@ -3,6 +3,7 @@ package com.coffee.service;
 import com.coffee.dto.SearchDto;
 import com.coffee.entity.Product;
 import com.coffee.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +12,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     @Autowired
     private ProductRepository productRepository ;
@@ -76,5 +80,16 @@ public class ProductService {
 
     public void save(Product product) {
         this.productRepository.save(product) ;
+    }
+
+
+
+    @Transactional
+    public boolean deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            return false;
+        }
+        productRepository.deleteById(id);
+        return true;
     }
 }

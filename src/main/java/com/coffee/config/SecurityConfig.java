@@ -6,15 +6,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    // 비밀번호 암호화용 Bean 등록
-    @Bean
+    @Bean // 비밀번호 암호화용 Bean 등록
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -170,6 +171,22 @@ public class ProductController {
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("message", e.getMessage(), "error", "error uploading file"));
+        }
+    }
+
+    // ADMIN 권한이 있어야 삭제 가능
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+        try {
+            boolean deleted = productService.deleteProduct(id);
+            if (deleted) {
+                return ResponseEntity.ok("상품이 삭제되었습니다.");
+            } else {
+                return ResponseEntity.badRequest().body("삭제 실패: 해당 상품이 존재하지 않습니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("삭제 중 오류 발생: " + e.getMessage());
         }
     }
 }
