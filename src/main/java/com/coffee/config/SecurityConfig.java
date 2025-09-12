@@ -26,7 +26,7 @@ WebMvcConfigurer.addCorsMappings()에서 설정한 값을 사용합니다.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // publicUrls는 무조건 허용하는 url 모음입니다.
-        String[] publicUrls = {"/member/**", "/images/**", "/product/**", "/cart/**"};
+        String[] publicUrls = {"/member/**", "/images/**", "/product/**", "/cart/**", "/order/**"};
 
         http
                 .cors(cors -> {})  // ✅ CORS 활성화
