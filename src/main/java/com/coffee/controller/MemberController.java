@@ -39,8 +39,6 @@ public class MemberController {
     컨트롤러 메소드의 매개 변수에 어떠한 것이 사용되는 지 공부해 주세요.
     */
 
-
-
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Member bean, HttpServletRequest request){
         // bean : 클라이언트에서 넘겨준 로그인 정보를 담고 있는 객체
@@ -90,7 +88,6 @@ public class MemberController {
 
         return ResponseEntity.ok("로그 아웃 성공") ;
     }
-
 
     private final PasswordEncoder passwordEncoder;
     @PostMapping("/signup")
