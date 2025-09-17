@@ -21,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations(uploadPath);
     }
 
+    // allowCredentials(true) : 브라우저가 이 서버와 쿠키(혹은 세션 등 인증정보)를 주고받는 것을 허용하겠습니다.
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 모든 경로 허용
