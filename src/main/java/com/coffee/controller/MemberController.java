@@ -90,6 +90,7 @@ public class MemberController {
     }
 
     private final PasswordEncoder passwordEncoder;
+	
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody Member member, BindingResult bindingResult){
         // ResponseEntity : HTTP 응답 코드, 메시지 등을 표현하는 클래스
@@ -111,6 +112,8 @@ public class MemberController {
         }
 
         // 이메일 중복 체크
+		Member member = this.memberService.findByEmail(bean.getEmail()) ;
+		
         if (memberRepository.findByEmail(member.getEmail()) != null) {
             return new ResponseEntity<>(Map.of("email", "이미 존재하는 이메일입니다."), HttpStatus.BAD_REQUEST);
         }

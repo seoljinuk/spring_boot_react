@@ -13,4 +13,15 @@ public class MemberService {
     public Member findByEmail(String email){
         return this.memberRepository.findByEmail(email);
     }
+	
+	@Override
+    @Transactional
+    public Member signup(Member member) {
+        // 비밀번호 암호화
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        member.setRole(Role.USER);
+        member.setRegdate(LocalDate.now());
+
+        return memberRepository.save(member);
+    }
 }
